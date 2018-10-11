@@ -20,7 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-ApiClient.new(access_key_id, access_key_secret).send_message(template_id, params)
+ApiClient.new(access_key_id, access_key_secret).send_message(phone_numbers, template_code, template_param, {sign_name: 'FILLER'})
 
 ## Development
 
