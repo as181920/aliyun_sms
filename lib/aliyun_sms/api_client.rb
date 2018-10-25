@@ -22,7 +22,7 @@ module AliyunSms
         TemplateParam: template_param
       }.tap do |p|
         key = "#{access_key_secret}&"
-        data = "GET&%2F&#{ERB::Util.url_encode(p.to_query)}"
+        data = "GET&%2F&#{ERB::Util.url_encode(p.to_query.gsub('+', '%20'))}"
         p[:Signature] = Base64.strict_encode64("#{OpenSSL::HMAC.digest("sha1", key, data)}")
       end
       resp = Faraday.get "http://dysmsapi.aliyuncs.com/?#{query_params.to_query}"
