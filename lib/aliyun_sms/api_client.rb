@@ -44,6 +44,33 @@ module AliyunSms
         .then { |resp| JSON.parse(resp.body) }
     end
 
+    def add_template(template_type:, name:, content:, remark:)
+      request_params = common_params(options:).merge(
+        Action: "AddSmsTemplate",
+        TemplateType: template_type,
+        TemplateName: name,
+        TemplateContent: content,
+        Remark: remark
+      ).tap { |params| params[:Signature] = sign(params) }
+      connection.post("/", request_params)
+        .tap { |resp| AliyunSms.logger.info "#{self.class.name} add_template response(#{resp.status}): #{resp.body.squish}" }
+        .then { |resp| JSON.parse(resp.body) }
+    end
+
+    def modify_template(template_type:, name:, template_code:, content:, remark:)
+      request_params = common_params(options:).merge(
+        Action: "ModifySmsTemplate",
+        TemplateType: template_type,
+        TemplateName: name,
+        TemplateCode: template_code,
+        TemplateContent: content,
+        Remark: remark
+      ).tap { |params| params[:Signature] = sign(params) }
+      connection.post("/", request_params)
+        .tap { |resp| AliyunSms.logger.info "#{self.class.name} add_template response(#{resp.status}): #{resp.body.squish}" }
+        .then { |resp| JSON.parse(resp.body) }
+    end
+
     def query_template(template_code, options: {})
       request_params = common_params(options:).merge(
         Action: "QuerySmsTemplate",
@@ -87,7 +114,7 @@ module AliyunSms
         Faraday.new(
           url: API_GATEWAY,
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
+            "Content-Type": "application/x-www-form-urlencoded"
           }.merge(extra_headers).compact
         )
       end
