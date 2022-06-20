@@ -54,6 +54,16 @@ module AliyunSms
         .then { |resp| JSON.parse(resp.body) }
     end
 
+    def delete_template(template_code)
+      request_params = common_params.merge(
+        Action: "DeleteSmsTemplate",
+        TemplateCode: template_code
+      ).tap { |params| params[:Signature] = sign(params) }
+      connection.post("/", request_params)
+        .tap { |resp| AliyunSms.logger.info "#{self.class.name} delete_template response(#{resp.status}): #{resp.body.squish}" }
+        .then { |resp| JSON.parse(resp.body) }
+    end
+
     def query_template_list(page: 1, per: 10, options: {})
       request_params = common_params(options:).merge(
         Action: "QuerySmsTemplateList",
