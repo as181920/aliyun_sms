@@ -45,7 +45,7 @@ module AliyunSms
     end
 
     def add_template(template_type:, name:, content:, remark:)
-      request_params = common_params(options:).merge(
+      request_params = common_params.merge(
         Action: "AddSmsTemplate",
         TemplateType: template_type,
         TemplateName: name,
@@ -58,7 +58,7 @@ module AliyunSms
     end
 
     def modify_template(template_type:, name:, template_code:, content:, remark:)
-      request_params = common_params(options:).merge(
+      request_params = common_params.merge(
         Action: "ModifySmsTemplate",
         TemplateType: template_type,
         TemplateName: name,
