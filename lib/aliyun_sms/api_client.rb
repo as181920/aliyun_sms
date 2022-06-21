@@ -67,7 +67,7 @@ module AliyunSms
         Remark: remark
       ).tap { |params| params[:Signature] = sign(params) }
       connection.post("/", request_params)
-        .tap { |resp| AliyunSms.logger.info "#{self.class.name} add_template response(#{resp.status}): #{resp.body.squish}" }
+        .tap { |resp| AliyunSms.logger.info "#{self.class.name} modify_template response(#{resp.status}): #{resp.body.squish}" }
         .then { |resp| JSON.parse(resp.body) }
     end
 
