@@ -23,6 +23,32 @@ module AliyunSms
       # Hash.from_xml(resp.body)["SendSmsResponse"]
     end
 
+    def add_sign(name:, source:, remark:, file_list: [])
+      request_params = common_params.merge(
+        Action: "AddSmsSign",
+        SignName: name,
+        SignSource: source,
+        Remark: remark,
+        SignFileList: file_list
+      ).tap { |params| params[:Signature] = sign(params) }
+      connection.post("/", request_params)
+        .tap { |resp| AliyunSms.logger.info "#{self.class.name} add_sign response(#{resp.status}): #{resp.body.squish}" }
+        .then { |resp| JSON.parse(resp.body) }
+    end
+
+    def modify_sign(name:, source:, remark:, file_list: [])
+      request_params = common_params.merge(
+        Action: "ModifySmsSign",
+        SignName: name,
+        SignSource: source,
+        Remark: remark,
+        SignFileList: file_list
+      ).tap { |params| params[:Signature] = sign(params) }
+      connection.post("/", request_params)
+        .tap { |resp| AliyunSms.logger.info "#{self.class.name} modify_sign response(#{resp.status}): #{resp.body.squish}" }
+        .then { |resp| JSON.parse(resp.body) }
+    end
+
     def query_sign(name, options: {})
       request_params = common_params(options:).merge(
         Action: "QuerySmsSign",
@@ -30,6 +56,16 @@ module AliyunSms
       ).tap { |params| params[:Signature] = sign(params) }
       connection.post("/", request_params)
         .tap { |resp| AliyunSms.logger.info "#{self.class.name} query_sign response(#{resp.status}): #{resp.body.squish}" }
+        .then { |resp| JSON.parse(resp.body) }
+    end
+
+    def delete_sign(name)
+      request_params = common_params.merge(
+        Action: "DeleteSmsSign",
+        SignName: name
+      ).tap { |params| params[:Signature] = sign(params) }
+      connection.post("/", request_params)
+        .tap { |resp| AliyunSms.logger.info "#{self.class.name} delete_sign response(#{resp.status}): #{resp.body.squish}" }
         .then { |resp| JSON.parse(resp.body) }
     end
 
