@@ -3,6 +3,7 @@ require "openssl"
 require "faraday"
 require "active_support/all"
 require "aliyun_sms/version"
+require "aliyun_sms/official_sdk"
 require "aliyun_sms/api_client"
 
 module AliyunSms

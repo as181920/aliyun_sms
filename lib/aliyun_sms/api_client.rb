@@ -144,6 +144,10 @@ module AliyunSms
       Base64.strict_encode64(OpenSSL::HMAC.digest('sha1', key, data))
     end
 
+    def official_sign(...)
+      official_sdk.sign(...)
+    end
+
     private
 
       def connection(extra_headers: {})
@@ -166,6 +170,10 @@ module AliyunSms
           Format: "JSON",
           RegionId: (options[:region_id] || "cn-hangzhou")
         }
+      end
+
+      def official_sdk
+        @official_sdk ||= OfficialSdk.new(access_key_id, access_key_secret)
       end
   end
 end
