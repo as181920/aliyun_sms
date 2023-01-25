@@ -30,7 +30,7 @@ module AliyunSms
         SignSource: source,
         Remark: remark,
         SignFileList: file_list
-      ).tap { |params| params[:Signature] = sign(params) }
+      ).then(&method(:flatten)).tap { |params| params[:Signature] = sign(params) }
       connection.post("/", request_params)
         .tap { |resp| AliyunSms.logger.info "#{self.class.name} add_sign response(#{resp.status}): #{resp.body.squish}" }
         .then { |resp| JSON.parse(resp.body) }
@@ -174,6 +174,10 @@ module AliyunSms
 
       def official_sdk
         @official_sdk ||= OfficialSdk.new(access_key_id, access_key_secret)
+      end
+
+      def flatten(params)
+        official_sdk.flat_params(params)
       end
   end
 end

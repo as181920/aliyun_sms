@@ -15,6 +15,18 @@ module AliyunSms
       Base64.strict_encode64(OpenSSL::HMAC.digest('sha1', key, string_to_sign))
     end
 
+    def flat_params(params)
+      target = {}
+      params.each do |key, value|
+        if value.instance_of?(Array)
+          replace_repeat_list(target, key, value)
+        else
+          target[key.to_s] = value
+        end
+      end
+      target
+    end
+
     private
 
       def encode(string)
@@ -38,18 +50,6 @@ module AliyunSms
             item.each_key { |k| target["#{key}.#{index.next}.#{k}"] = item[k] }
           else
             target["#{key}.#{index.next}"] = item
-          end
-        end
-        target
-      end
-
-      def flat_params(params)
-        target = {}
-        params.each do |key, value|
-          if value.instance_of?(Array)
-            replace_repeat_list(target, key, value)
-          else
-            target[key.to_s] = value
           end
         end
         target
