@@ -6,6 +6,6 @@ class AliyunSmsTest < Minitest::Test
   end
 
   def test_it_does_something_useful
-    assert false
+    skip "TODO: to be implemented"
   end
 end
